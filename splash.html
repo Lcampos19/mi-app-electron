@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Actualización</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial;
+        background: #1e1e1e;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .box {
+        text-align: center;
+        width: 80%;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      .yes {
+        background: #4caf50;
+        color: white;
+      }
+
+      .no {
+        background: #f44336;
+        color: white;
+      }
+
+      progress {
+        width: 100%;
+        height: 20px;
+      }
+
+      #progressBox {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="box">
+      <!-- PANEL 1 -->
+      <div id="questionBox">
+        <h3>Existe una nueva versión</h3>
+        <p>¿Desea actualizarla?</p>
+
+        <button class="yes" onclick="startUpdate()">Sí</button>
+        <button class="no" onclick="skipUpdate()">No</button>
+      </div>
+
+      <!-- PANEL 2 (PROGRESO) -->
+      <div id="progressBox">
+        <h3>Actualizando...</h3>
+
+        <progress id="bar" value="0" max="100"></progress>
+        <p id="percent">0%</p>
+      </div>
+    </div>
+
+    <script>
+      const { ipcRenderer } = require("electron");
+
+      function startUpdate() {
+        document.getElementById("questionBox").style.display = "none";
+        document.getElementById("progressBox").style.display = "block";
+
+        ipcRenderer.send("start-update");
+      }
+
+      function skipUpdate() {
+        ipcRenderer.send("skip-update");
+      }
+
+      ipcRenderer.on("update-progress", (e, p) => {
+        document.getElementById("bar").value = p;
+        document.getElementById("percent").innerText = p + "%";
+      });
+    </script>
+  </body>
+</html>

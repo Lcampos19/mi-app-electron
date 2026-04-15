@@ -5,14 +5,17 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "electron-builder --win --publish always"
   },
   "build": {
     "appId": "com.miapp.app",
     "productName": "MiApp",
     "publish": [
       {
-        "provider": "github"
+        "provider": "github",
+        "owner": "Lcampos19",
+        "repo": "mi-app-electron",
+        "releaseType": "release"
       }
     ],
     "win": {
